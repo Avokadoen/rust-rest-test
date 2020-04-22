@@ -3,8 +3,8 @@ This is a test project to get familiar with using rust to build rest api's
 
 Currently it uses 
 
-- diesel for db connections and queries
-- rocket for end points?
+- diesel for db connections and queries (dockerized mysql instance)
+- rocket for end point
 
 # Source 
 Diesel: http://diesel.rs/guides/getting-started/  
