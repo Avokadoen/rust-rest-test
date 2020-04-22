@@ -4,6 +4,8 @@ extern crate dotenv;
 
 use diesel::prelude::*;
 use diesel::mysql::MysqlConnection;
+use diesel::result::Error;
+
 use dotenv::dotenv;
 use std::env;
 
@@ -12,24 +14,21 @@ use self::models::{NewTest, Test};
 pub mod schema;
 pub mod models;
 
+use schema::test::dsl::*;
+
 pub fn establish_connection() -> MysqlConnection {
     dotenv().ok();
 
     let database_url = env::var("DATABASE_URL")
         .expect("DATABASE_URL must be set");
-    
+
     
     MysqlConnection::establish(&database_url)
     .expect(&format!("Error connecting to {}", database_url))
 }
 
 pub fn create_test<'a>(conn: &MysqlConnection, key: &'a str, value: &'a str) -> Result<Test, diesel::result::Error> {
-
-    use diesel::result::Error;
-
     conn.transaction::<Test, Error, _>(|| {
-        use schema::test::dsl::*;
-
         let new_test = NewTest {
             t_key: key,
             t_value: value,
@@ -50,4 +49,8 @@ pub fn create_test<'a>(conn: &MysqlConnection, key: &'a str, value: &'a str) -> 
             .nth(0)
             .unwrap())  // TODO: never unwrap in production
     })
+}
+
+pub fn find(conn: &MysqlConnection, q_id: i32) -> Result<Test, Error> {
+    test.find(q_id).first::<Test>(conn)
 }

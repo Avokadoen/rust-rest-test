@@ -1,6 +1,8 @@
 use super::schema::test;
 
-#[derive(Queryable, PartialEq, Debug)]
+use serde::Serialize;
+
+#[derive(Queryable, PartialEq, Serialize)]
 pub struct Test {
     pub id: i32,
     pub t_key: String,

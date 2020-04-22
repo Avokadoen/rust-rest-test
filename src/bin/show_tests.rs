@@ -12,7 +12,7 @@ fn main() {
     let results= test.filter(t_key.eq("hello"))
         .limit(5)
         .load::<Test>(&connection)
-        .expect("Error loading posts");
+        .expect("Error loading test");
 
     println!("Displaying {} test data", results.len());
     for result in results {
